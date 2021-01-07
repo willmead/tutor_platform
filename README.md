@@ -11,7 +11,7 @@ The language used is Python and it requires Django and Jinja.
 
 ### TODO
 
-1. [] Read lessons from a csv file / databse.
-2. [] Generate Invoices.
+1. [ ] Read lessons from a csv file / databse.
+2. [ ] Generate Invoices.
 
 
