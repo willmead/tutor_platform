@@ -13,10 +13,57 @@
         <div class="tile is-parent">
           <div class="tile is-child">
             <h1 class='title is-1 is-spaced has-text-centered'>Add Lesson</h1>
-        
-            <form method="post">{% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Save">
+
+            <form method="POST" action=''>
+              {% csrf_token %}
+
+              <div class="field">
+                <label class="label">Student</label>
+                <div class="control">
+                  <div class="select">
+                    <select name="student" id="student" required>
+                      {% for student in user.profile.students.all %}
+                        <option value="{{ student.id }}">{{student}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Date</label>
+                <div class="control">
+                  <input type="datetime" data-show-header=false data-date-format="YYYY-MM-DD" name="date" id="date" required>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Duration</label>
+                <div class="control">
+                  <input class="input" type="number" placeholder="Duration" name="duration" id="duration" required>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Topic</label>
+                <div class="control">
+                  <input class="input" type="text" placeholder="Topic" name="topic" id="topic" required>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Report</label>
+                <div class="control">
+                  <textarea class="textarea" placeholder="How did the lesson go?" name="report" id="report" required></textarea>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <button class="button is-link" type="submit">Submit</button>
+                </div>
+              </div>
+
             </form>
 
           </div>
