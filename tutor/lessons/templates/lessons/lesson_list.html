@@ -3,19 +3,11 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-      <section class="section">
-        <div class="container">
-          <h1 class="title">Dashboard</h1>
-          <p class="subtitle">
-            Welcome back <strong>{{ user.username }}</strong>!
-          </p>
-        </div>
-      </section>
 
       <section class="section">
         <div class="container">
-          <h1 class="title">Recent Lessons</h1>
-          <p class="subtitle">Last 5 Lessons</p>
+          <h1 class="title">All Lessons</h1>
+          <p class="subtitle">Use the search bar to find specific students.</p>
 
           <table class="table">
             <thead>
@@ -28,7 +20,7 @@
             </thead>
             <tbody>
 
-              {% for lesson in user.profile.lesson_set.all|slice:":5" %}
+              {% for lesson in lessons %}
               <tr>
                 <th>{{ lesson.date }}</th>
                 <td>{{ lesson.student }}</td>
@@ -44,15 +36,12 @@
       </section>
 
 
-
-
-
     {% else %}
       <section class="section">
         <div class="container">
-          <h1 class="title">Organise: The Simple Platform for Efficient Tutors</h1>
+          <h1 class="title">Ooops!</h1>
           <p class="subtitle">
-            My first website with <strong>Bulma</strong>!
+            You need to be logged in to view this page!
           </p>
         </div>
       </section>

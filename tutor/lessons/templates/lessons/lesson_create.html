@@ -1,0 +1,50 @@
+{% extends "lessons/base_template.html" %}
+
+{% block content %}
+
+  <section class='section'>
+    <div class='container'>
+      <div class="tile is-ancestor">
+
+        <div class="tile is-parent">
+          <div class="tile is-child"></div>
+        </div>
+
+        <div class="tile is-parent">
+          <div class="tile is-child">
+            <h1 class='title is-1 is-spaced has-text-centered'>Add Lesson</h1>
+        
+            <form method="post">{% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Save">
+            </form>
+
+          </div>
+        </div>
+
+        <div class="tile is-parent">
+          <div class="tile is-child"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script type="module">
+
+    var options = {}
+    // Initialize all input of type date
+    var calendars = bulmaCalendar.attach('[type="datetime"]', options);
+
+    // To access to bulmaCalendar instance of an element
+    var element = document.querySelector('#id_date');
+    if (element) {
+    	// bulmaCalendar instance is available as element.bulmaCalendar
+    	element.bulmaCalendar.on('select', function(datepicker) {
+    		console.log(datepicker.data.value());
+    	});
+    }
+  </script>
+
+
+{% endblock %}
