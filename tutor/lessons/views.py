@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.views.generic.edit import CreateView
 # from django.urls import reverse
 
-from .models import Lesson, Student
+from .models import Lesson, Student, Invoice
 
 
 class IndexView(generic.TemplateView):
@@ -38,6 +38,20 @@ class LessonListView(LoginRequiredMixin, generic.ListView):
 
 class LessonDetailView(LoginRequiredMixin, generic.DetailView):
     model = Lesson
+
+
+class InvoiceListView(LoginRequiredMixin, generic.ListView):
+    model = Invoice
+    template_name = 'invoices/invoice_list.html'
+    context_object_name = 'invoices'
+    queryset = Invoice.objects.all()
+
+
+class InvoiceDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Invoice
+    template_name = "invoices/invoice_detail.html"
+
+
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)

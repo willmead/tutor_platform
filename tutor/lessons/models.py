@@ -42,6 +42,15 @@ class Lesson(models.Model):
         return f"{self.student} ({self.date})"
 
 
+class Invoice(models.Model):
+    lessons = models.ManyToManyField(Lesson)
+    date = models.DateField()
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.date}"
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
