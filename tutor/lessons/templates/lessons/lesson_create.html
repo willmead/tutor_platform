@@ -22,7 +22,7 @@
                 <div class="control">
                   <div class="select">
                     <select name="student" id="student" required>
-                      {% for student in user.profile.students.all %}
+                      {% for student in user.profile.student_set.all %}
                         <option value="{{ student.id }}">{{student}}</option>
                       {% endfor %}
                     </select>
@@ -40,7 +40,7 @@
               <div class="field">
                 <label class="label">Duration</label>
                 <div class="control">
-                  <input class="input" type="number" placeholder="Duration" name="duration" id="duration" required>
+                  <input class="input" type="number" step=".5" placeholder="Duration" name="duration" id="duration" required>
                 </div>
               </div>
 
