@@ -1,8 +1,8 @@
-# Create your views here.
+from datetime import date
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Lesson, Student, Invoice
+from .models import Lesson, Student, Invoice, Group
 
 
 class IndexView(generic.TemplateView):
@@ -43,15 +43,23 @@ class InvoiceCreateView(LoginRequiredMixin, generic.TemplateView):
     def post(self, request, *args, **kwargs):
         data = request.POST.dict()
         print(data)
-        
-        # lesson = Lesson()
-        # lesson.student = Student.objects.get(pk=data["student"])
-        # lesson.date = data["date"]
-        # lesson.duration_in_hours = data["duration"]
-        # lesson.topic = data["topic"]
-        # lesson.report = data["report"]
-        # lesson.profile = request.user.profile
-        # lesson.save()
+
+        students = Group.objects.get(pk=data["group"]).students.all()
+        lessons = []
+        for student in students:
+            for lesson in student.lesson_set.all():
+                if not lesson.is_invoiced:
+                    lesson.is_invoiced = True
+                    lesson.save()
+                    lessons.append(lesson)
+
+        invoice = Invoice()
+        invoice.date = date.today()
+        invoice.profile = request.user.profile
+        invoice.group = Group.objects.get(pk=data["group"])
+        invoice.save()
+        invoice.lessons.set(lessons)
+        invoice.save()
 
         return self.get(self, request, *args, **kwargs)
 

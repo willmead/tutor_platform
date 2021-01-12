@@ -39,7 +39,6 @@ class Profile(models.Model):
         return self.user.username
 
 
-
 class Lesson(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     date = models.DateTimeField()
@@ -52,6 +51,9 @@ class Lesson(models.Model):
     class Meta:
         ordering = ['-date']
 
+    def total(self):
+        return self.student.rate_per_hour * self.duration_in_hours
+
     def __str__(self):
         return f"{self.student} ({self.date})"
 
@@ -60,6 +62,10 @@ class Invoice(models.Model):
     lessons = models.ManyToManyField(Lesson)
     date = models.DateField()
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    def total(self):
+        return sum([lesson.total() for lesson in self.lessons.all()])
 
     def __str__(self):
         return f"{self.date}"

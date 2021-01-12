@@ -6,19 +6,21 @@
 
       <section class="section">
         <div class="container">
-          <h1 class="title">All Lessons</h1>
-          <p class="subtitle">Use the search bar to find specific students.</p>
+          <h1 class="title">All Invoices</h1>
+          <p class="subtitle">Use the search bar to find specific groups.</p>
 
           <table class="table">
             <thead>
               <tr>
                 <th>Date</th>
+                <th>Group</th>
               </tr>
             </thead>
             <tbody>
               {% for invoice in invoices %}
               <tr>
-                <th>{{ invoice.date }}</th>
+                <td>{{ invoice.date }}</td>
+                <td>{{ invoice.group }}</td>
                 <td><a href="{% url 'lessons:view_invoice' pk=invoice.pk %}">View Invoice</a></td>
               </tr>
               {% endfor %}

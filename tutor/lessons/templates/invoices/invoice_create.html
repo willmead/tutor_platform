@@ -21,7 +21,7 @@
                 <label class="label">Group</label>
                 <div class="control">
                   <div class="select">
-                    <select name="student" id="student" required>
+                    <select name="group" id="group" required>
                       {% for group in user.profile.groups.all %}
                         <option value="{{ group.id }}">{{ group }}</option>
                       {% endfor %}
