@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 
@@ -11,12 +11,20 @@ class Subject(models.Model):
         return self.name
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Student(models.Model):
     name = models.CharField(max_length=256)
     year = models.IntegerField()
     subjects = models.ManyToManyField(Subject)
     notes = models.TextField()
     rate_per_hour = models.IntegerField(default=50)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -25,18 +33,10 @@ class Student(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=256)
     students = models.ManyToManyField(Student)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    students = models.ManyToManyField(Student)
-    groups = models.ManyToManyField(Group)
-
-    def __str__(self):
-        return self.user.username
 
 
 class Lesson(models.Model):
@@ -69,6 +69,13 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"{self.date}"
+
+
+@receiver(pre_delete, sender=Invoice, dispatch_uid='invoice_delete_signal')
+def uninvoice_lessons(sender, instance, using, **kwargs):
+    for lesson in instance.lessons.all():
+        lesson.is_invoiced = False
+        lesson.save()
 
 
 @receiver(post_save, sender=User)
