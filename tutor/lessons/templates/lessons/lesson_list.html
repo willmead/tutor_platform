@@ -16,16 +16,17 @@
                 <th>Student</th>
                 <th>Duration</th>
                 <th>Topic</th>
+                <th>Invoiced</th>
               </tr>
             </thead>
             <tbody>
-
               {% for lesson in lessons %}
               <tr>
                 <th>{{ lesson.date }}</th>
                 <td>{{ lesson.student }}</td>
                 <td>{{ lesson.duration_in_hours }}</td>
                 <td>{{ lesson.topic }}</td>
+                <td>{{ lesson.is_invoiced }}
                 <td><a href="{% url 'lessons:view_lesson' pk=lesson.pk %}">View Lesson</a></td>
               </tr>
               {% endfor %}

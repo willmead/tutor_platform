@@ -7,10 +7,10 @@
       <section class="section">
         <div class="container">
           <h1 class="title is-1">{{ lesson.student }}</h1>
-          <p class="subtitle">{{ lesson.date }}</p>
+          <p class="subtitle">Date: {{ lesson.date }}</p>
+          <h3 class="subtitle">Topic(s): {{lesson.topic}}</h3>
+          <h3 class="subtitle">Duration: {{lesson.duration_in_hours}} hours</h3>
           <br>
-          <h3 class="title">Topic(s): {{lesson.topic}}</h3>
-          <h3 class="title">Duration: {{lesson.duration_in_hours}} hours</h3>
           <p>{{lesson.report}}</p>
 
         </div>

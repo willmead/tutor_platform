@@ -22,12 +22,22 @@ class Student(models.Model):
         return self.name
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Group(models.Model):
+    name = models.CharField(max_length=256)
     students = models.ManyToManyField(Student)
 
     def __str__(self):
+        return self.name
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    students = models.ManyToManyField(Student)
+    groups = models.ManyToManyField(Group)
+
+    def __str__(self):
         return self.user.username
+
 
 
 class Lesson(models.Model):
@@ -36,7 +46,11 @@ class Lesson(models.Model):
     duration_in_hours = models.FloatField()
     topic = models.CharField(max_length=256, default="General")
     report = models.TextField()
+    is_invoiced = models.BooleanField(default=False)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-date']
 
     def __str__(self):
         return f"{self.student} ({self.date})"

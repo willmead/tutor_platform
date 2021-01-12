@@ -29,7 +29,7 @@
         <div class="navbar-start">
           <a class="navbar-item" href="{% url 'lessons:index'%}">Home</a>
           <a class="navbar-item" href="{% url 'lessons:view_lessons'%}">Lessons</a>
-          <a class="navbar-item">Invoices</a>
+          <a class="navbar-item" href="{% url 'lessons:view_invoices'%}">Invoices</a>
 
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">Add</a>
@@ -38,6 +38,7 @@
               <a class="navbar-item" href="{% url 'lessons:add_lesson'%}">Lesson</a>
               <a class="navbar-item">Student</a>
               <a class="navbar-item">Subject</a>
+              <a class="navbar-item" href="{% url 'lessons:add_invoice'%}">Invoice</a>
             </div>
           </div>
         </div>

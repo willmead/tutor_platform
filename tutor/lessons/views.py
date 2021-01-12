@@ -1,9 +1,6 @@
 # Create your views here.
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.views.generic.edit import FormView
-# from django.views.generic.edit import CreateView
-# from django.urls import reverse
 
 from .models import Lesson, Student, Invoice
 
@@ -38,6 +35,25 @@ class LessonListView(LoginRequiredMixin, generic.ListView):
 
 class LessonDetailView(LoginRequiredMixin, generic.DetailView):
     model = Lesson
+
+
+class InvoiceCreateView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "invoices/invoice_create.html"
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST.dict()
+        print(data)
+        
+        # lesson = Lesson()
+        # lesson.student = Student.objects.get(pk=data["student"])
+        # lesson.date = data["date"]
+        # lesson.duration_in_hours = data["duration"]
+        # lesson.topic = data["topic"]
+        # lesson.report = data["report"]
+        # lesson.profile = request.user.profile
+        # lesson.save()
+
+        return self.get(self, request, *args, **kwargs)
 
 
 class InvoiceListView(LoginRequiredMixin, generic.ListView):
