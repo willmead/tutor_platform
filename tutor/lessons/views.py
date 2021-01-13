@@ -1,6 +1,7 @@
 from datetime import date
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 
 from .models import Lesson, Student, Invoice, Group
 
@@ -16,7 +17,7 @@ class IndexView(LoginRequiredMixin, generic.TemplateView):
 
 
 class LessonCreateView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "lessons/lesson_create.html"
+    template_name = "lessons_new/lesson_create.html"
 
     def post(self, request, *args, **kwargs):
         data = request.POST.dict()
@@ -30,7 +31,8 @@ class LessonCreateView(LoginRequiredMixin, generic.TemplateView):
         lesson.profile = request.user.profile
         lesson.save()
 
-        return self.get(self, request, *args, **kwargs)
+        # return self.get(self, request, *args, **kwargs)
+        return redirect('lessons:view_lessons')
 
 
 class LessonListView(LoginRequiredMixin, generic.ListView):
