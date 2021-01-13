@@ -35,12 +35,14 @@ class LessonCreateView(LoginRequiredMixin, generic.TemplateView):
 
 class LessonListView(LoginRequiredMixin, generic.ListView):
     model = Lesson
+    template_name = "lessons_new/lesson_list.html"
     context_object_name = 'lessons'
     queryset = Lesson.objects.all()
 
 
 class LessonDetailView(LoginRequiredMixin, generic.DetailView):
     model = Lesson
+    template_name = "lessons_new/lesson_detail.html"
 
 
 class InvoiceCreateView(LoginRequiredMixin, generic.TemplateView):
