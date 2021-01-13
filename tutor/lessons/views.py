@@ -5,8 +5,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Lesson, Student, Invoice, Group
 
 
-class IndexView(generic.TemplateView):
-    template_name = 'lessons/index.html'
+class IndexView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'lessons_new/index.html'
+    context_object_name = "context"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({'total_owed': 1000})
+        return context
 
 
 class LessonCreateView(LoginRequiredMixin, generic.TemplateView):
@@ -76,7 +82,6 @@ class InvoiceDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "invoices/invoice_detail.html"
 
 
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     return context
+class InvoiceDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Invoice
+    success_url = ""

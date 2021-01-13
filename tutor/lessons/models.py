@@ -25,6 +25,7 @@ class Student(models.Model):
     notes = models.TextField()
     rate_per_hour = models.IntegerField(default=50)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -61,6 +62,7 @@ class Lesson(models.Model):
 class Invoice(models.Model):
     lessons = models.ManyToManyField(Lesson)
     date = models.DateField()
+    is_paid = models.BooleanField(default=False)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
