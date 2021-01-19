@@ -14,9 +14,13 @@ class IndexView(LoginRequiredMixin, generic.TemplateView):
     def get_total_hours(self):
         return sum([lesson.duration_in_hours for lesson in Lesson.objects.all()])
 
+    def get_total_earned(self):
+        return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in Lesson.objects.all()])
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({'hours_taught': self.get_total_hours()})
+        context.update({'total_earned': self.get_total_earned()})
         return context
 
 
