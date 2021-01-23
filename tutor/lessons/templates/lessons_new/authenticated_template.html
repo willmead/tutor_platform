@@ -73,7 +73,7 @@
       <p class="menu-label">General</p>
       <ul class="menu-list">
         <li>
-          <a href="{% url 'lessons:index' %}" class="is-active router-link-active has-icon">
+          <a href="{% url 'lessons:index' %}" class="{% if request.resolver_match.url_name == 'index' %}is-active router-link-active{% endif %} has-icon">
             <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
             <span class="menu-item-label">Dashboard</span>
           </a>
@@ -82,13 +82,13 @@
       <p class="menu-label">Tools</p>
       <ul class="menu-list">
         <li>
-          <a href="{% url 'lessons:view_lessons' %}" class="has-icon">
+          <a href="{% url 'lessons:view_lessons' %}" class="{% if request.resolver_match.url_name == 'view_lessons' or request.resolver_match.url_name == 'add_lesson' or request.resolver_match.url_name == 'view_lesson' %}is-active router-link-active{% endif %} has-icon">
             <span class="icon"><i class="mdi mdi-table"></i></span>
             <span class="menu-item-label">Lessons</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'lessons:view_invoices' %}" class="has-icon">
+          <a href="{% url 'lessons:view_invoices' %}" class="{% if request.resolver_match.url_name == 'view_invoices' or request.resolver_match.url_name == 'add_invoice' or request.resolver_match.url_name == 'view_invoice' %}is-active router-link-active{% endif %}has-icon">
             <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
             <span class="menu-item-label">Invoices</span>
           </a>
@@ -181,8 +181,6 @@
 
 <!-- Scripts below are for demo only -->
 <script type="text/javascript" src="{% static 'lessons/main.js' %}"></script>
-<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script> -->
-<!-- <script type="text/javascript" src="js/chart.sample.min.js"></script> -->
 
 <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
 <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
