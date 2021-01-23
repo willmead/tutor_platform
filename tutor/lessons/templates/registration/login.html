@@ -16,7 +16,9 @@
     <section class="hero is-fullheight">
       <div class="hero-body has-text-centered">
         <div class="login">
-          <img src="https://logoipsum.com/logo/logo-1.svg" width="325px" />
+          <!-- <img src="https://logoipsum.com/logo/logo-1.svg" width="325px" /> -->
+          <h1 class="title">Organise</h1>
+          <h3 class="subtitle">Your Lessons</h3>
           <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="field">
@@ -30,18 +32,11 @@
               </div>
             </div>
             <br />
-            <!-- <button class="button is-link" type="submit" value="login">Submit</button> -->
             <button class="button is-block is-fullwidth is-primary is-medium is-rounded" type="submit" value="login">
               Login
             </button>
           </form>
-          <br>
           <nav class="level">
-            <div class="level-item has-text-centered">
-              <div>
-                <a href="#">Forgot Password?</a>
-              </div>
-            </div>
             <div class="level-item has-text-centered">
               <div>
                 <a href="#">Create an Account</a>
