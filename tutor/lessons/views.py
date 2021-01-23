@@ -8,7 +8,7 @@ from .models import Lesson, Student, Invoice, Group
 
 
 class IndexView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'lessons_new/index.html'
+    template_name = 'lessons/index.html'
     context_object_name = "context"
 
     def get_total_hours(self):
@@ -25,7 +25,7 @@ class IndexView(LoginRequiredMixin, generic.TemplateView):
 
 
 class LessonCreateView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "lessons_new/lesson_create.html"
+    template_name = "lessons/lesson_create.html"
 
     def post(self, request, *args, **kwargs):
         data = request.POST.dict()
@@ -45,14 +45,14 @@ class LessonCreateView(LoginRequiredMixin, generic.TemplateView):
 
 class LessonListView(LoginRequiredMixin, generic.ListView):
     model = Lesson
-    template_name = "lessons_new/lesson_list.html"
+    template_name = "lessons/lesson_list.html"
     context_object_name = 'lessons'
     queryset = Lesson.objects.all()
 
 
 class LessonDetailView(LoginRequiredMixin, generic.DetailView):
     model = Lesson
-    template_name = "lessons_new/lesson_detail.html"
+    template_name = "lessons/lesson_detail.html"
 
 
 class InvoiceCreateView(LoginRequiredMixin, generic.TemplateView):
