@@ -1,4 +1,6 @@
 {% extends 'general/authenticated_template.html' %}
+{% load static %}
+
 
 {% block content %}
 
@@ -6,7 +8,7 @@
   <div class="hero-body">
     <div class="level">
       <div class="level-left">
-        <div class="level-item"><h1 class="title">Lessons</h1></div>
+        <div class="level-item"><h1 class="title">Dashboard</h1></div>
       </div>
       <div class="level-right" style="display: none;">
         <div class="level-item"></div>
@@ -21,7 +23,7 @@
       <div class="level-item">
         <ul>
           <li>{{user.username}}</li>
-          <li>Lessons</li>
+          <li>Dashboard</li>
         </ul>
       </div>
     </div>
@@ -32,6 +34,10 @@
             <span class="icon"><i class="mdi mdi-plus"></i></span>
             <span>Add Lesson</span>
           </a>
+          <a href="{% url 'lessons:add_invoice' %}" class="button is-primary">
+            <span class="icon"><i class="mdi mdi-plus"></i></span>
+            <span>Add Invoice</span>
+          </a>
         </div>
       </div>
     </div>
@@ -39,6 +45,72 @@
 </section>
 
 <section class="section is-main-section">
+
+  <div class="tile is-ancestor">
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label"><h3 class="subtitle is-spaced">
+                Total Earned
+              </h3>
+                <h1 class="title">
+                  £{{ total_earned }}
+                </h1>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-primary is-large"><i
+                  class="mdi mdi-account-multiple mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label"><h3 class="subtitle is-spaced">
+                Hours Taught
+              </h3>
+                <h1 class="title">
+                  {{ hours_taught }}
+                </h1>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-info is-large"><i
+                  class="mdi mdi-cart-outline mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label">
+                <h3 class="subtitle is-spaced">Lessons Completed</h3>
+                <h1 class="title">{{ user.profile.lesson_set.all|length }}</h1>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-success is-large"><i
+                  class="mdi mdi-finance mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="card has-table has-mobile-sort-spaced">
     <header class="card-header">
@@ -62,8 +134,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for lesson in user.profile.lesson_set.all %}
-              {% if lesson.is_invoiced == False %}
+            {% for lesson in user.profile.lesson_set.all|slice:":5" %}
               <tr>
                 <td class="is-image-cell">
                   <div class="image">
@@ -87,7 +158,6 @@
                   </div>
                 </td>
               </tr>
-              {% endif %}
             {% endfor %}
 
             </tbody>
@@ -101,7 +171,7 @@
     <header class="card-header">
       <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-        Invoiced Lessons
+        Recent Invoices
       </p>
     </header>
     <div class="card-content">
@@ -111,41 +181,46 @@
             <thead>
             <tr>
               <th></th>
-              <th>Name</th>
               <th>Group</th>
-              <th>Topic(s)</th>
               <th>Date</th>
-              <th></th>
+              <th>Total</th>
+              <th>Paid</th>
             </tr>
             </thead>
             <tbody>
-            {% for lesson in user.profile.lesson_set.all %}
-              {% if lesson.is_invoiced %}
+
+            {% for invoice in user.profile.invoice_set.all|slice:":5" %}
               <tr>
                 <td class="is-image-cell">
                   <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/{{lesson.student.name}}.svg" class="is-rounded">
+                    <img src="https://avatars.dicebear.com/v2/initials/{{invoice.group}}.svg" class="is-rounded">
                   </div>
                 </td>
-                <td data-label="Name">{{ lesson.student.name }}</td>
-                <td data-label="Group">{{ lesson.student.group_set.all.0 }}</td>
-                <td data-label="Topic">{{ lesson.topic }}</td>
+                <td data-label="Group">{{invoice.group}}</td>
                 <td data-label="Date">
-                  <small class="has-text-grey is-abbr-like" title="Oct 25, 2020">{{lesson.date}}</small>
+                  <small class="has-text-grey is-abbr-like" title="Oct 25, 2020">{{invoice.date}}</small>
+                </td>
+                <td data-label="Total">{{invoice.total}}</td>
+                <td data-label="Paid">
+                  {% if invoice.is_paid %}
+                    <span class="icon"><i class="mdi mdi-check"></i></span>
+                  {% else %}
+                    <span class="icon"><i class="mdi mdi-close"></i></span>
+                  {% endif %}
                 </td>
                 <td class="is-actions-cell">
                   <div class="buttons is-right">
-                    <a class="button is-small is-primary" type="button" href="{% url 'lessons:view_lesson' pk=lesson.pk %}">
+                    <a class="button is-small is-primary" type="button" href="{% url 'lessons:view_invoice' pk=invoice.pk %}">
                       <span class="icon"><i class="mdi mdi-eye"></i></span>
                     </a>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
+                    <a class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
                       <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
+                    </a>
                   </div>
                 </td>
               </tr>
-              {% endif %}
             {% endfor %}
+
 
             </tbody>
           </table>
@@ -154,6 +229,6 @@
     </div>
   </div>
 
-  </section>
+</section>
 
 {% endblock %}

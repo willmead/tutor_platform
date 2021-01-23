@@ -39,19 +39,15 @@
         <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider has-user-avatar is-hoverable">
           <a class="navbar-link is-arrowless">
             <div class="is-user-avatar">
-              <img src="https://avatars.dicebear.com/v2/initials/william-mead.svg" alt="William Mead">
+              <img src="https://avatars.dicebear.com/v2/initials/'{{user.first_name}} {{user.last_name}}'.svg" alt="{{user.first_name}} {{user.last_name}}">
             </div>
-            <div class="is-user-name"><span>William Mead</span></div>
+            <div class="is-user-name"><span>{{user.first_name}} {{user.last_name}}</span></div>
             <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
           </a>
           <div class="navbar-dropdown">
-            <a href="profile.html" class="navbar-item">
+            <a href="{% url 'lessons:profile' %}" class="navbar-item">
               <span class="icon"><i class="mdi mdi-account"></i></span>
               <span>My Profile</span>
-            </a>
-            <a class="navbar-item">
-              <span class="icon"><i class="mdi mdi-settings"></i></span>
-              <span>Settings</span>
             </a>
           </div>
         </div>
@@ -94,9 +90,15 @@
           </a>
         </li>
         <li>
-          <a href="profile.html" class="has-icon">
+          <a href="{% url 'lessons:view_students' %}" class="{% if request.resolver_match.url_name == 'view_students' or request.resolver_match.url_name == 'add_student' or request.resolver_match.url_name == 'view_student' %}is-active router-link-active{% endif %}has-icon">
             <span class="icon"><i class="mdi mdi-account-circle"></i></span>
             <span class="menu-item-label">Students</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'lessons:view_groups' %}" class="{% if request.resolver_match.url_name == 'view_groups' or request.resolver_match.url_name == 'add_group' or request.resolver_match.url_name == 'view_group' %}is-active router-link-active{% endif %}has-icon">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span class="menu-item-label">Groups</span>
           </a>
         </li>
         <li>
@@ -124,7 +126,7 @@
       <p class="menu-label">About</p>
       <ul class="menu-list">
         <li>
-          <a href="" target="_blank" class="has-icon">
+          <a href="" class="has-icon">
             <span class="icon"><i class="mdi mdi-credit-card-outline"></i></span>
             <span class="menu-item-label">Help</span>
           </a>

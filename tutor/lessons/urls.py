@@ -15,5 +15,19 @@ urlpatterns = [
     path('invoices/', views.InvoiceListView.as_view(), name='view_invoices'),
     path('invoices/add', views.InvoiceCreateView.as_view(), name="add_invoice"),
     path('invoices/<int:pk>', views.InvoiceDetailView.as_view(), name="view_invoice"),
-    path('invoices/delete/<int:pk>', views.InvoiceDeleteView.as_view(), name="delete_invoice")
+    path('invoices/delete/<int:pk>', views.InvoiceDeleteView.as_view(), name="delete_invoice"),
+
+    # Students
+    path('students/', views.StudentListView.as_view(), name='view_students'),
+    # path('students/add', view.StudentCreateView.as_view(), name='add_student'),
+    # path('students/<int:pk>', views.StudentDetailView.as_view(), name='view_student'),
+
+    # Groups
+    path('groups/', views.GroupListView.as_view(), name='view_groups'),
+    # path('groups/add', view.GroupCreateView.as_view(), name='add_group'),
+    # path('groups/<int:pk>', views.GroupDetailView.as_view(), name='view_group'),
+
+    # General
+    path('profile/', views.ProfileView.as_view(), name='profile'),
+
 ]

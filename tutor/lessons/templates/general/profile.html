@@ -1,6 +1,4 @@
-{% extends 'lessons/authenticated_template.html' %}
-{% load static %}
-
+{% extends 'general/authenticated_template.html' %}
 
 {% block content %}
 
@@ -8,7 +6,7 @@
   <div class="hero-body">
     <div class="level">
       <div class="level-left">
-        <div class="level-item"><h1 class="title">Dashboard</h1></div>
+        <div class="level-item"><h1 class="title">Profile</h1></div>
       </div>
       <div class="level-right" style="display: none;">
         <div class="level-item"></div>
@@ -23,23 +21,23 @@
       <div class="level-item">
         <ul>
           <li>{{user.username}}</li>
-          <li>Dashboard</li>
+          <li>Profile</li>
         </ul>
       </div>
     </div>
     <div class="level-right">
-      <div class="level-item">
+      <!-- <div class="level-item">
         <div class="buttons is-right">
-          <a href="{% url 'lessons:add_lesson' %}" class="button is-primary">
-            <span class="icon"><i class="mdi mdi-plus"></i></span>
-            <span>Add Lesson</span>
+          <a href="{% url 'lessons:view_lessons'%}" class="button is-danger">
+            <span class="icon"><i class="mdi mdi-pen"></i></span>
+            <span>Edit Lesson</span>
           </a>
-          <a href="{% url 'lessons:add_invoice' %}" class="button is-primary">
-            <span class="icon"><i class="mdi mdi-plus"></i></span>
-            <span>Add Invoice</span>
+          <a href="{% url 'lessons:view_lessons'%}" class="button is-info">
+            <span class="icon"><i class="mdi mdi-keyboard-backspace"></i></span>
+            <span>Back to Lessons</span>
           </a>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </section>
@@ -111,12 +109,77 @@
       </div>
     </div>
   </div>
+  <div class="tile is-ancestor">
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label"><h3 class="subtitle is-spaced">
+                Students
+              </h3>
+                <h1 class="title">
+                  {{ user.profile.student_set.all|length }}
+                </h1>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-primary is-large"><i
+                  class="mdi mdi-account-multiple mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label"><h3 class="subtitle is-spaced">
+                Number of Groups
+              </h3>
+                <h1 class="title">
+                  {{ user.profile.group_set.all|length }}
+                </h1>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-info is-large"><i
+                  class="mdi mdi-cart-outline mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <div class="card tile is-child">
+        <div class="card-content">
+          <div class="level is-mobile">
+            <div class="level-item">
+              <div class="is-widget-label">
+                <h3 class="subtitle is-spaced">Invoices Created</h3>
+                <h1 class="title">{{ user.profile.invoice_set.all|length }}</h1>
+              </div>
+            </div>
+            <div class="level-item has-widget-icon">
+              <div class="is-widget-icon"><span class="icon has-text-success is-large"><i
+                  class="mdi mdi-finance mdi-48px"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="card has-table has-mobile-sort-spaced">
     <header class="card-header">
       <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-        Recent Lessons
+        Groups
       </p>
     </header>
     <div class="card-content">
@@ -127,29 +190,21 @@
             <tr>
               <th></th>
               <th>Name</th>
-              <th>Group</th>
-              <th>Topic(s)</th>
-              <th>Date</th>
               <th></th>
             </tr>
             </thead>
             <tbody>
-            {% for lesson in user.profile.lesson_set.all|slice:":5" %}
+            {% for group in user.profile.group_set.all %}
               <tr>
                 <td class="is-image-cell">
                   <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/{{lesson.student.name}}.svg" class="is-rounded">
+                    <img src="https://avatars.dicebear.com/v2/initials/{{group.name}}.svg" class="is-rounded">
                   </div>
                 </td>
-                <td data-label="Name">{{ lesson.student.name }}</td>
-                <td data-label="Group">{{ lesson.student.group_set.all.0 }}</td>
-                <td data-label="Topic">{{ lesson.topic }}</td>
-                <td data-label="Date">
-                  <small class="has-text-grey is-abbr-like" title="Oct 25, 2020">{{lesson.date}}</small>
-                </td>
+                <td data-label="Name">{{ group.name }}</td>
                 <td class="is-actions-cell">
                   <div class="buttons is-right">
-                    <a class="button is-small is-primary" type="button" href="{% url 'lessons:view_lesson' pk=lesson.pk %}">
+                    <a class="button is-small is-primary" type="button" href="">
                       <span class="icon"><i class="mdi mdi-eye"></i></span>
                     </a>
                     <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
@@ -171,7 +226,7 @@
     <header class="card-header">
       <p class="card-header-title">
         <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-        Recent Invoices
+        Students
       </p>
     </header>
     <div class="card-content">
@@ -181,46 +236,33 @@
             <thead>
             <tr>
               <th></th>
+              <th>Name</th>
               <th>Group</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Paid</th>
+              <th></th>
             </tr>
             </thead>
             <tbody>
-
-            {% for invoice in user.profile.invoice_set.all|slice:":5" %}
+            {% for student in user.profile.student_set.all %}
               <tr>
                 <td class="is-image-cell">
                   <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/{{invoice.group}}.svg" class="is-rounded">
+                    <img src="https://avatars.dicebear.com/v2/initials/{{student.name}}.svg" class="is-rounded">
                   </div>
                 </td>
-                <td data-label="Group">{{invoice.group}}</td>
-                <td data-label="Date">
-                  <small class="has-text-grey is-abbr-like" title="Oct 25, 2020">{{invoice.date}}</small>
-                </td>
-                <td data-label="Total">{{invoice.total}}</td>
-                <td data-label="Paid">
-                  {% if invoice.is_paid %}
-                    <span class="icon"><i class="mdi mdi-check"></i></span>
-                  {% else %}
-                    <span class="icon"><i class="mdi mdi-close"></i></span>
-                  {% endif %}
-                </td>
+                <td data-label="Name">{{ student.name }}</td>
+                <td data-label="Group">{{ student.group_set.all.0 }}</td>
                 <td class="is-actions-cell">
                   <div class="buttons is-right">
-                    <a class="button is-small is-primary" type="button" href="{% url 'lessons:view_invoice' pk=invoice.pk %}">
+                    <a class="button is-small is-primary" type="button" href="">
                       <span class="icon"><i class="mdi mdi-eye"></i></span>
                     </a>
-                    <a class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
+                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
                       <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </a>
+                    </button>
                   </div>
                 </td>
               </tr>
             {% endfor %}
-
 
             </tbody>
           </table>
@@ -228,7 +270,6 @@
       </div>
     </div>
   </div>
-
 </section>
 
 {% endblock %}

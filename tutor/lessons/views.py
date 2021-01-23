@@ -2,25 +2,25 @@ from datetime import date
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.db.models import Sum
+# from django.db.models import Sum
 
 from .models import Lesson, Student, Invoice, Group
 
+def get_total_hours():
+    return sum([lesson.duration_in_hours for lesson in Lesson.objects.all()])
+
+def get_total_earned():
+    return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in Lesson.objects.all()])
+
 
 class IndexView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'lessons/index.html'
+    template_name = 'general/index.html'
     context_object_name = "context"
-
-    def get_total_hours(self):
-        return sum([lesson.duration_in_hours for lesson in Lesson.objects.all()])
-
-    def get_total_earned(self):
-        return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in Lesson.objects.all()])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'hours_taught': self.get_total_hours()})
-        context.update({'total_earned': self.get_total_earned()})
+        context.update({'hours_taught': get_total_hours()})
+        context.update({'total_earned': get_total_earned()})
         return context
 
 
@@ -97,3 +97,28 @@ class InvoiceDetailView(LoginRequiredMixin, generic.DetailView):
 class InvoiceDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Invoice
     success_url = ""
+
+
+class GroupListView(LoginRequiredMixin, generic.ListView):
+    model = Group
+    template_name = "groups/group_list.html"
+    context_object_name = 'groups'
+    queryset = Group.objects.all()
+
+
+class StudentListView(LoginRequiredMixin, generic.ListView):
+    model = Student
+    template_name = "students/student_list.html"
+    context_object_name = 'students'
+    queryset = Student.objects.all()
+
+
+class ProfileView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "general/profile.html"
+    context_object_name = "context"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({'hours_taught': get_total_hours()})
+        context.update({'total_earned': get_total_earned()})
+        return context
