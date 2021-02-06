@@ -1,8 +1,9 @@
-from datetime import date
+from datetime import date, datetime
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-# from django.db.models import Sum
+from django.http import HttpResponse, HttpResponseRedirect
+
 
 from .models import Lesson, Student, Invoice, Group
 
@@ -12,6 +13,8 @@ def get_total_hours():
 def get_total_earned():
     return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in Lesson.objects.all()])
 
+def get_monthly_earnings():
+    return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in Lesson.objects.all() if lesson.date.month == datetime.now().month])
 
 class IndexView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'general/index.html'
@@ -21,6 +24,7 @@ class IndexView(LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({'hours_taught': get_total_hours()})
         context.update({'total_earned': get_total_earned()})
+        context.update({'monthly_earnings': get_monthly_earnings()})
         return context
 
 
@@ -97,6 +101,12 @@ class InvoiceDetailView(LoginRequiredMixin, generic.DetailView):
 class InvoiceDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Invoice
     success_url = ""
+
+def pay_invoice(request, pk):
+    invoice = Invoice.objects.get(pk=pk)
+    invoice.is_paid = True
+    invoice.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class GroupListView(LoginRequiredMixin, generic.ListView):

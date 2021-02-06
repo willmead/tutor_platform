@@ -33,8 +33,12 @@
             <span class="icon"><i class="mdi mdi-keyboard-backspace"></i></span>
             <span>Back to Invoices</span>
           </a>
-          <a href="{% url 'lessons:view_invoices'%}" class="button is-danger">
+          <a href="{% url 'lessons:pay_invoice' invoice.pk %}" onclick="pay_invoice()" class="button is-primary">
             <span class="icon"><i class="mdi mdi-pen"></i></span>
+            <span>Pay Invoice</span>
+          </a>
+          <a href="{% url 'lessons:view_invoices' %}" class="button is-danger">
+            <span class="icon"><i class="mdi mdi-delete"></i></span>
             <span>Delete Invoice</span>
           </a>
         </div>
@@ -124,5 +128,11 @@
   </div>
 
 </section>
+
+<script>
+  function pay_invoice() {
+    console.log("Hello World");
+  }
+</script>
 
 {% endblock %}

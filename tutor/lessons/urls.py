@@ -16,6 +16,7 @@ urlpatterns = [
     path('invoices/add', views.InvoiceCreateView.as_view(), name="add_invoice"),
     path('invoices/<int:pk>', views.InvoiceDetailView.as_view(), name="view_invoice"),
     path('invoices/delete/<int:pk>', views.InvoiceDeleteView.as_view(), name="delete_invoice"),
+    path('invoices/pay/<int:pk>', views.pay_invoice, name="pay_invoice"),
 
     # Students
     path('students/', views.StudentListView.as_view(), name='view_students'),

@@ -25,7 +25,6 @@ class Student(models.Model):
     notes = models.TextField()
     rate_per_hour = models.IntegerField(default=50)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    # group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -65,6 +64,9 @@ class Invoice(models.Model):
     is_paid = models.BooleanField(default=False)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-date']
 
     def total(self):
         return sum([lesson.total() for lesson in self.lessons.all()])
