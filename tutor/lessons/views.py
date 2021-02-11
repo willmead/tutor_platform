@@ -145,3 +145,11 @@ class ProfileView(LoginRequiredMixin, generic.TemplateView):
         context.update({'hours_taught': get_total_hours(self.request.user)})
         context.update({'total_earned': get_total_earned(self.request.user)})
         return context
+
+
+class AboutView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "general/about.html"
+
+
+class HelpView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "general/help.html"

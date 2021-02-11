@@ -30,5 +30,7 @@ urlpatterns = [
 
     # General
     path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('help/', views.HelpView.as_view(), name='help'),
+    path('about/', views.AboutView.as_view(), name='about')
 
 ]
