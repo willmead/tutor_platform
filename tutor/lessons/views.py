@@ -1,30 +1,38 @@
 from datetime import date, datetime
+
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.http import HttpResponse, HttpResponseRedirect
-
+from django.http import HttpResponseRedirect
 
 from .models import Lesson, Student, Invoice, Group
 
-def get_total_hours():
-    return sum([lesson.duration_in_hours for lesson in Lesson.objects.all()])
 
-def get_total_earned():
-    return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in Lesson.objects.all()])
+def get_total_hours(user):
+    return sum([lesson.duration_in_hours for lesson in user.profile.lesson_set.all()])
 
-def get_monthly_earnings():
-    return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in Lesson.objects.all() if lesson.date.month == datetime.now().month])
+
+def get_total_earned(user):
+    return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in user.profile.lesson_set.all()])
+
+
+def get_monthly_earnings(user):
+    return sum([lesson.duration_in_hours * lesson.student.rate_per_hour for lesson in user.profile.lesson_set.all() if lesson.date.month == datetime.now().month])
+
 
 class IndexView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'general/index.html'
     context_object_name = "context"
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
         context = super().get_context_data(**kwargs)
-        context.update({'hours_taught': get_total_hours()})
-        context.update({'total_earned': get_total_earned()})
-        context.update({'monthly_earnings': get_monthly_earnings()})
+        context.update({'hours_taught': get_total_hours(user)})
+        context.update({'total_earned': get_total_earned(user)})
+        context.update({'monthly_earnings': get_monthly_earnings(user)})
+        print(self.request.user)
+        print(user.profile.lesson_set.all())
+
         return context
 
 
@@ -51,7 +59,9 @@ class LessonListView(LoginRequiredMixin, generic.ListView):
     model = Lesson
     template_name = "lessons/lesson_list.html"
     context_object_name = 'lessons'
-    queryset = Lesson.objects.all()
+
+    def get_queryset(self):
+        return self.request.user.profile.lesson_set.all()
 
 
 class LessonDetailView(LoginRequiredMixin, generic.DetailView):
@@ -83,14 +93,16 @@ class InvoiceCreateView(LoginRequiredMixin, generic.TemplateView):
         invoice.lessons.set(lessons)
         invoice.save()
 
-        return self.get(self, request, *args, **kwargs)
+        return redirect('lessons:view_invoices')
 
 
 class InvoiceListView(LoginRequiredMixin, generic.ListView):
     model = Invoice
     template_name = 'invoices/invoice_list.html'
     context_object_name = 'invoices'
-    queryset = Invoice.objects.all()
+
+    def get_queryset(self):
+        return self.request.user.profile.invoice_set.all()
 
 
 class InvoiceDetailView(LoginRequiredMixin, generic.DetailView):
@@ -101,6 +113,7 @@ class InvoiceDetailView(LoginRequiredMixin, generic.DetailView):
 class InvoiceDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Invoice
     success_url = ""
+
 
 def pay_invoice(request, pk):
     invoice = Invoice.objects.get(pk=pk)
@@ -129,6 +142,6 @@ class ProfileView(LoginRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'hours_taught': get_total_hours()})
-        context.update({'total_earned': get_total_earned()})
+        context.update({'hours_taught': get_total_hours(self.request.user)})
+        context.update({'total_earned': get_total_earned(self.request.user)})
         return context
